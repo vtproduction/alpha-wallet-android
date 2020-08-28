@@ -29,6 +29,7 @@ import android.widget.Toast;
 
 import com.alphawallet.app.C;
 import com.alphawallet.app.R;
+import com.alphawallet.app.entity.BackupOperationType;
 import com.alphawallet.app.entity.BackupTokenCallback;
 import com.alphawallet.app.entity.ContractLocator;
 import com.alphawallet.app.entity.ErrorEnvelope;
@@ -525,10 +526,10 @@ public class WalletFragment extends BaseFragment implements
         switch (viewModel.getWalletType())
         {
             case HDKEY:
-                intent.putExtra("TYPE", BackupKeyActivity.BackupOperationType.BACKUP_HD_KEY);
+                intent.putExtra("TYPE", BackupOperationType.BACKUP_HD_KEY);
                 break;
             case KEYSTORE:
-                intent.putExtra("TYPE", BackupKeyActivity.BackupOperationType.BACKUP_KEYSTORE_KEY);
+                intent.putExtra("TYPE", BackupOperationType.BACKUP_KEYSTORE_KEY);
                 break;
         }
 
