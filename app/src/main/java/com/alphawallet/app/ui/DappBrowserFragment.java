@@ -23,6 +23,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,7 +51,6 @@ import com.alphawallet.app.entity.DApp;
 import com.alphawallet.app.entity.DAppFunction;
 import com.alphawallet.app.entity.FragmentMessenger;
 import com.alphawallet.app.entity.NetworkInfo;
-import com.alphawallet.app.entity.PinAuthenticationCallbackInterface;
 import com.alphawallet.app.entity.QRResult;
 import com.alphawallet.app.entity.SignAuthenticationCallback;
 import com.alphawallet.app.entity.SignTransactionInterface;
@@ -75,6 +75,7 @@ import com.alphawallet.app.util.BalanceUtils;
 import com.alphawallet.app.util.DappBrowserUtils;
 import com.alphawallet.app.util.Hex;
 import com.alphawallet.app.util.KeyboardUtils;
+import com.alphawallet.app.util.LocaleUtils;
 import com.alphawallet.app.util.QRParser;
 import com.alphawallet.app.util.Utils;
 import com.alphawallet.app.viewmodel.DappBrowserViewModel;
@@ -95,16 +96,12 @@ import com.alphawallet.token.entity.SalesOrderMalformed;
 import com.alphawallet.token.entity.Signable;
 import com.alphawallet.token.tools.Numeric;
 import com.alphawallet.token.tools.ParseMagicLink;
-import com.google.gson.Gson;
-import com.google.zxing.common.StringUtils;
 
 import org.web3j.crypto.Keys;
 import org.web3j.crypto.Sign;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.security.SignatureException;
 import java.util.Deque;
 import java.util.HashMap;
@@ -219,6 +216,7 @@ public class DappBrowserFragment extends Fragment implements OnSignTransactionLi
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+        LocaleUtils.setActiveLocale(getContext());
         super.onCreate(savedInstanceState);
     }
 
@@ -242,6 +240,7 @@ public class DappBrowserFragment extends Fragment implements OnSignTransactionLi
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         AndroidSupportInjection.inject(this);
+        LocaleUtils.setActiveLocale(getContext());
         int webViewID = VisibilityFilter.minimiseBrowserURLBar() ? R.layout.fragment_webview_compact : R.layout.fragment_webview;
         View view = inflater.inflate(webViewID, container, false);
         initViewModel();
@@ -493,18 +492,23 @@ public class DappBrowserFragment extends Fragment implements OnSignTransactionLi
         urlTv = view.findViewById(R.id.url_tv);
         swipeRefreshLayout = view.findViewById(R.id.swipe_refresh);
         swipeRefreshLayout.setRefreshInterface(this);
+
         toolbar = view.findViewById(R.id.address_bar);
+
+        //If you are wondering about the strange way the menus are inflated - this is required to ensure
+        //that the menu text gets created with the correct localisation under every circumstance
+        MenuInflater inflater = new MenuInflater(LocaleUtils.getActiveLocaleContext(getContext()));
         if (VisibilityFilter.minimiseBrowserURLBar())
         {
-            toolbar.inflateMenu(R.menu.menu_scan);
+            inflater.inflate(R.menu.menu_scan, toolbar.getMenu());
         }
         else if (EthereumNetworkRepository.defaultDapp() != null)
         {
-            toolbar.inflateMenu(R.menu.menu_defaultdapp);
+            inflater.inflate(R.menu.menu_defaultdapp, toolbar.getMenu());
         }
         else
         {
-            toolbar.inflateMenu(R.menu.menu_bookmarks);
+            inflater.inflate(R.menu.menu_bookmarks, toolbar.getMenu());
         }
         refresh = view.findViewById(R.id.refresh);
         setupMenu(view);
