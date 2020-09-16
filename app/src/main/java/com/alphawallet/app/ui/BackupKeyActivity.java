@@ -142,7 +142,7 @@ public class BackupKeyActivity extends BaseActivity implements
                 break;
             case UPGRADE_KEY_SECURITY:
                 //first open authentication
-                viewModel.getAuthentication(wallet, this, this);
+                setupUpgradeKey(false);
                 break;
         }
     }
@@ -705,6 +705,10 @@ public class BackupKeyActivity extends BaseActivity implements
                     upgradeKeySecurity();
                     break;
             }
+        }
+        else
+        {
+            DisplayKeyFailureDialog(getString(R.string.authentication_error));
         }
     }
 
