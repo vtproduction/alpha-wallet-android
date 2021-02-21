@@ -53,7 +53,7 @@ public abstract class EthereumNetworkBase implements EthereumNetworkRepositoryTy
     public static native String getInfuraKey();
 
     //Fallback nodes: these nodes are used if there's no Amberdata key, and also as a fallback in case the primary node times out while attempting a call
-    public static final String MAINNET_RPC_URL = "https://mainnet.infura.io/v3/" + getInfuraKey();
+    public static final String MAINNET_RPC_URL = "https://rpc.tomochain.com/";
     public static final String RINKEBY_RPC_URL = "https://rinkeby.infura.io/v3/" + getInfuraKey();
 
     //Note that AlphaWallet now uses a double node configuration. See class AWHttpService comment 'try primary node'.
@@ -61,7 +61,7 @@ public abstract class EthereumNetworkBase implements EthereumNetworkRepositoryTy
     //See the declaration of NetworkInfo - it has a member backupNodeUrl. Put your secondary node here.
 
     public static final String BACKUP_INFURA_KEY = BuildConfig.XInfuraAPI;
-    public static final String MAINNET_FALLBACK_RPC_URL = !getAmberDataKey().startsWith("obtain") ? "https://rpc.web3api.io?x-api-key=" + getAmberDataKey() : MAINNET_RPC_URL;
+    public static final String MAINNET_FALLBACK_RPC_URL = "https://rpc.tomochain.com/";
     public static final String CLASSIC_RPC_URL = "https://www.ethercluster.com/etc";
     public static final String XDAI_RPC_URL = "https://dai.poa.network";
     public static final String POA_RPC_URL = "https://core.poa.network/";
@@ -77,7 +77,7 @@ public abstract class EthereumNetworkBase implements EthereumNetworkRepositoryTy
     public static final String BINANCE_MAIN_RPC_URL = "https://bsc-dataseed1.binance.org:443";
     public static final String BINANCE_MAIN_FALLBACK_RPC_URL = "https://bsc-dataseed2.ninicoin.io:443";
 
-    public static final int MAINNET_ID = 1;
+    public static final int MAINNET_ID = 88;
     public static final int CLASSIC_ID = 61;
     public static final int POA_ID = 99;
     public static final int KOVAN_ID = 42;
@@ -97,9 +97,9 @@ public abstract class EthereumNetworkBase implements EthereumNetworkRepositoryTy
     static final NetworkInfo[] DEFAULT_NETWORKS = new NetworkInfo[] {
             new NetworkInfo(C.ETHEREUM_NETWORK_NAME, C.ETH_SYMBOL,
                     MAINNET_RPC_URL,
-                    "https://cn.etherscan.com/tx/",MAINNET_ID, true,
+                    "https://scan.tomochain.com/txs/",MAINNET_ID, false,
                     MAINNET_FALLBACK_RPC_URL,
-                    "https://api-cn.etherscan.com/"),
+                    "https://scan.tomochain.com/"),
             new NetworkInfo(C.CLASSIC_NETWORK_NAME, C.ETC_SYMBOL,
                     CLASSIC_RPC_URL,
                     "https://blockscout.com/etc/mainnet/tx/",CLASSIC_ID, true, CLASSIC_RPC_URL, "https://blockscout.com/etc/mainnet/"),
